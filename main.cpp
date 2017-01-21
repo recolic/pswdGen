@@ -8,6 +8,8 @@ int main(int arg_size, char **arg)
 {
     //Init env variables
     string outputPath, seedPath, requestDomain;
+    bool bStrongerPassword = false;
+    size_t forcedLength = 16;
     //Read command line
     if(arg_size == 1)
         showHelpInfoAndExit();
@@ -22,20 +24,36 @@ int main(int arg_size, char **arg)
                     if(cstreql(arg[cter], "-o") || cstreql(arg[cter], "--output"))
                     {
                         current_config = RECOLIC_ARG_OUTPUT_PATH;
+                        DEBUG_PRINT("-o detected.");
                         continue;
                     }
                     else if(cstreql(arg[cter], "-h") || cstreql(arg[cter], "--help"))
                     {
+                        DEBUG_PRINT("-h detected.");
                         showHelpInfoAndExit();
                     }
                     else if(cstreql(arg[cter], "-s") || cstreql(arg[cter], "--seed"))
                     {
                         current_config = RECOLIC_ARG_SEED_PATH;
+                        DEBUG_PRINT("-s detected.");
+                        continue;
+                    }
+                    else if(cstreql(arg[cter], "-l") || cstreql(arg[cter], "--length"))
+                    {
+                        current_config = RECOLIC_ARG_PSWD_LENGTH;
+                        DEBUG_PRINT("-l detected.");
                         continue;
                     }
                     else if(cstreql(arg[cter], "-f") || cstreql(arg[cter], "--for"))
                     {
                         current_config = RECOLIC_ARG_REQUEST_DOMAIN;
+                        DEBUG_PRINT("-f detected.");
+                        continue;
+                    }
+                    else if(cstreql(arg[cter], "-S") || cstreql(arg[cter], "--strong"))
+                    {
+                        bStrongerPassword = true;
+                        DEBUG_PRINT("-S detected.");
                         continue;
                     }
                     else
@@ -46,12 +64,19 @@ int main(int arg_size, char **arg)
                     break;
                 case RECOLIC_ARG_OUTPUT_PATH:
                     outputPath = arg[cter];
+                    current_config = RECOLIC_ARG_NULL;
+                    break;
+                case RECOLIC_ARG_PSWD_LENGTH:
+                    forcedLength = stoul(string(arg[cter]));
+                    current_config = RECOLIC_ARG_NULL;
                     break;
                 case RECOLIC_ARG_SEED_PATH:
                     seedPath = arg[cter];
+                    current_config = RECOLIC_ARG_NULL;
                     break;
                 case RECOLIC_ARG_REQUEST_DOMAIN:
                     requestDomain = arg[cter];
+                    current_config = RECOLIC_ARG_NULL;
                     break;
                 default:
                     throw logic_error("At main.cpp, line 54, invalid argument analyser(bug1001).");
@@ -79,22 +104,20 @@ int main(int arg_size, char **arg)
     iSeed.close();
     //Get result.
     pswdGener gen;
-    string result = gen(iBuffer, requestDomain);
+    string result = gen(iBuffer, requestDomain, bStrongerPassword, forcedLength);
     if(outputPath.size() == 0)
     {
         gt_print_pswd:
+#if ros==OS_WINDOWS
+        toClipboard(result.c_str());
+        cout << "Password is generated and copied to clipboard successfully. Print it out?(y/Any other key to deny) >";
+#else
         cout << "Password is generated successfully. Print it out ?(y/Any other key to deny) >";
+#endif
         string bPrint;
         cin >> bPrint;
         if(bPrint == "y" || bPrint == "Y")
-            cout << "Your password is " << result << " and it's automatically copied to clipboard. " << endl;
-        else
-            cout << "Result copied to clipboard." << endl;
-#if ros==OS_WINDOWS
-        toClipboard(result.c_str());
-#else
-        cout << "Can't visit clipboard.System limit." << endl;
-#endif
+            cout << "Your password is " << result << endl;
         return 0;
     }
     else
@@ -114,6 +137,6 @@ int main(int arg_size, char **arg)
 
 void showHelpInfoAndExit()
 {
-    cout << "********pswdGener*******\\n---by Recolic Keghart---\\n---github.com/recolic---\\n---   GNU LICENSED   ---\\n************************\\nUsage: pswdGen [options]\\nOptions: \\n-h --help:\\n    Show this message.\\n-o --output:\\n    Path to get output.\\n-s --seed:\\n[NEED]Give path to seed file.\\n-f --for:\\n[NEED]Identifyer to where the pswd is used.\\n\\nExample:\\n.\\/pswdGen -h\\n.\\/pswdGen -s ~\\/se.txt -f recolic.net -o out.txt" << endl;
+    cout << HELP_INFO << endl;
     exit(0);
 }

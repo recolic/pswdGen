@@ -13,7 +13,7 @@ using std::string;
 class pswdGener
 {
 public:
-    string operator()(const string &seed, const string &domain) const
+    string operator()(const string &seed, const string &domain, bool stronger = false, size_t length = 0) const
     {
         //Enhash seed for encrypt.
         string hashed_seed;
@@ -25,7 +25,7 @@ public:
             dataToEncrypt += '0';
         std::shared_ptr<unsigned char> pEncrypedData(new unsigned char[dataToEncrypt.size()]{});
         plusaes::Error aes_error = plusaes::encrypt_ecb(reinterpret_cast<const unsigned char *>(dataToEncrypt.c_str()), dataToEncrypt.size(),
-                                                        reinterpret_cast<const unsigned char *>(hashed_seed.c_str()), hashed_seed.size(),
+                                                        reinterpret_cast<const unsigned char *>(hashed_seed.c_str()), 32,
                                                         pEncrypedData.get(), dataToEncrypt.size(), false);
         if(aes_error != plusaes::ERROR_OK)
         {
@@ -41,7 +41,26 @@ public:
                     throw std::logic_error("At pswdGener.h, line 40, unknown error.");
             }
         }
-        return string(reinterpret_cast<const char *>(pEncrypedData.get()));
+        //Encode encrypted string and let it visiable.
+        if(stronger)
+        {
+            char dic[] = "ASDF=GHJ*K_L+#Q!WE=RTY_Uuu426357IOP.Z=XC*VB.:;][[]asqwtynbTNYCO5E00@#NM96_3@-vv#85V27.410+aiqw_.ertyuUUU#opsd=f@ghjklzxm@nb.vcvV";
+            string toReturn;
+            for(size_t cter = 0; cter < dataToEncrypt.size(); ++cter)
+            {
+                toReturn += dic[(pEncrypedData.get()[cter]) % 128];
+            }
+            return length > 0 ? toReturn.substr(0, length) : toReturn;
+        }
+        else
+        {
+            char dic[] = "ASDFGHJKLQWERTYUIOPZXCVBNM9638527410aiqwertyuopsdfghjklzxmnbvcvV";
+            string toReturn;
+            for (size_t cter = 0; cter < dataToEncrypt.size(); ++cter) {
+                toReturn += dic[(pEncrypedData.get()[cter]) % 64];
+            }
+            return length > 0 ? toReturn.substr(0, length) : toReturn;
+        }
     }
 };
 
