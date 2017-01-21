@@ -9,6 +9,7 @@ int main(int arg_size, char **arg)
     //Init env variables
     string outputPath, seedPath, requestDomain;
     bool bStrongerPassword = false;
+    bool bNoConfirm = false;
     size_t forcedLength = 16;
     //Read command line
     if(arg_size == 1)
@@ -54,6 +55,12 @@ int main(int arg_size, char **arg)
                     {
                         bStrongerPassword = true;
                         DEBUG_PRINT("-S detected.");
+                        continue;
+                    }
+                    else if(cstreql(arg[cter], "-y") || cstreql(arg[cter], "--no-confirm"))
+                    {
+                        bNoConfirm = true;
+                        DEBUG_PRINT("-y detected.");
                         continue;
                     }
                     else
@@ -114,9 +121,14 @@ int main(int arg_size, char **arg)
 #else
         cout << "Password is generated successfully. Print it out ?(y/Any other key to deny) >";
 #endif
-        string bPrint;
-        cin >> bPrint;
-        if(bPrint == "y" || bPrint == "Y")
+        if(!bNoConfirm)
+        {
+            string bPrint;
+            cin >> bPrint;
+            if(bPrint == "y" || bPrint == "Y")
+                cout << "Your password is " << result << endl;
+        }
+        else
             cout << "Your password is " << result << endl;
         return 0;
     }

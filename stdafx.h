@@ -68,6 +68,6 @@ void toClipboard(const std::string &s){
 #endif
 
 //other info
-#define HELP_INFO "********pswdGener*******\n---by Recolic Keghart---\n---github.com/recolic---\n---   GNU LICENSED   ---\n************************\nUsage: pswdGen [options]\nOptions: \n-h --help:\n    Show this message.\n-o --output:\n    Path to get output.\n-S --strong:\n    Generate stronger password.\n-l --length:\n    Give max length of the pswd.(16 by default, 0 for INF)\n-s --seed:\n[NEED]Give path to seed file.\n-f --for:\n[NEED]Identifyer to where the pswd is used.\n\nExample:\n./pswdGen -h\n./pswdGen -s ~/se.txt -f recolic.net -o out.txt"
+#define HELP_INFO "********pswdGener*******\n---by Recolic Keghart---\n---github.com/recolic---\n---   GNU LICENSED   ---\n************************\nUsage: pswdGen [options]\nOptions: \n-h --help:\n    Show this message.\n-o --output:\n    Path to get output.\n-S --strong:\n    Generate stronger password.\n-y --no-confirm:\n    Directly output the result.\n-l --length:\n    Give max length of the pswd.(16 by default, 0 for INF)\n-s --seed:\n[NEED]Give path to seed file.\n-f --for:\n[NEED]Identifyer to where the pswd is used.\n\nExample:\n./pswdGen -h\n./pswdGen -s ~/se.txt -f recolic.net -o out.txt"
 
 #endif //PSWDGEN_STDAFX_H
