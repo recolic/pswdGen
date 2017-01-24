@@ -115,14 +115,14 @@ int main(int arg_size, char **arg)
     if(outputPath.size() == 0)
     {
         gt_print_pswd:
+        if(!bNoConfirm)
+        {
 #if ros==OS_WINDOWS
         toClipboard(result.c_str());
         cout << "Password is generated and copied to clipboard successfully. Print it out?(y/Any other key to deny) >";
 #else
         cout << "Password is generated successfully. Print it out ?(y/Any other key to deny) >";
 #endif
-        if(!bNoConfirm)
-        {
             string bPrint;
             cin >> bPrint;
             if(bPrint == "y" || bPrint == "Y")
