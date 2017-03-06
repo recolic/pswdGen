@@ -16,13 +16,13 @@ public:
     string operator()(const string &seed, const string &domain, bool stronger = false, size_t length = 0) const
     {
         //Enhash seed for encrypt.
-        string hashed_seed;
+        string hashed_seed, hashed_domain;
         picosha2::hash256_hex_string(seed, hashed_seed);
-        DEBUG_PRINT(hashed_seed.c_str());
+        picosha2::hash256_hex_string(domain, hashed_domain);
         //AES encrypt by hashed_seed.
-        string dataToEncrypt = string("RecolicEncrypt") + domain + "End";
+        string dataToEncrypt = string("RecolicEncrypt") + hashed_domain + "End";
         while(dataToEncrypt.size() % 16 != 0)
-            dataToEncrypt += '0';
+            dataToEncrypt += 'n';
         std::shared_ptr<unsigned char> pEncrypedData(new unsigned char[dataToEncrypt.size()]{});
         plusaes::Error aes_error = plusaes::encrypt_ecb(reinterpret_cast<const unsigned char *>(dataToEncrypt.c_str()), dataToEncrypt.size(),
                                                         reinterpret_cast<const unsigned char *>(hashed_seed.c_str()), 32,
@@ -54,7 +54,7 @@ public:
         }
         else
         {
-            char dic[] = "ASDFGHJKLQWERTYUIOPZXCVBNM9638527410aiqwertyuopsdfghjklzxmnbvcvV";
+            char dic[] = "ASDFGHJKLQW61TYUkOPZXCVBNM9638527410aiqwertyuopsdfghjk9zxmnbvcvV";
             string toReturn;
             for (size_t cter = 0; cter < dataToEncrypt.size(); ++cter) {
                 toReturn += dic[(pEncrypedData.get()[cter]) % 64];

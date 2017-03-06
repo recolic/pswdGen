@@ -62,7 +62,6 @@ endif()
 
 
 
-
 set(CMAKE_C_IMPLICIT_LINK_LIBRARIES "c")
 set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES "/usr/lib/gcc/x86_64-pc-linux-gnu/6.2.1;/usr/lib;/lib")
 set(CMAKE_C_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "")

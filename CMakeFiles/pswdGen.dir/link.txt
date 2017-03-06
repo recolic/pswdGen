@@ -1,1 +1,1 @@
-/usr/bin/c++      CMakeFiles/pswdGen.dir/main.cpp.o  -o pswdGen 
+/usr/bin/c++   -g   CMakeFiles/pswdGen.dir/main.cpp.o  -o pswdGen 
