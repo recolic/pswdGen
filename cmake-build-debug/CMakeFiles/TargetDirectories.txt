@@ -1,3 +1,0 @@
-/home/recolic/CLionProjects/pswdGen/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/recolic/CLionProjects/pswdGen/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/recolic/CLionProjects/pswdGen/cmake-build-debug/CMakeFiles/pswdGen.dir
