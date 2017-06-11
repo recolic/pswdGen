@@ -96,32 +96,40 @@ int main(int arg_size, char **arg)
         return 0;
     }
     //Read seed file.
-    istream &seedInput = [&]()->istream &{
-        if(seedPath == "-")
-        { //Read stdin
-            if(!bNoConfirm)
-                throw invalid_argument("Argument Error: -y is needed while appointing - as seedPath.");
-            return cin;
-        }
-        else
-        {
-            static ifstream iSeed(seedPath, ios::in);
-            if(!iSeed)
-            {
-                DEBUG_PRINT((string("File:") + seedPath).c_str());
-                throw runtime_error("Can't open seed file. Please check and try again. ");
-            }
-            return iSeed;
-        }
-    }();
-
-    seedInput.seekg(0, ios::end);
     string iBuffer;
-    iBuffer.reserve(static_cast<unsigned long>(seedInput.tellg()));
-    seedInput.seekg(0, ios::beg);
-    iBuffer.assign(istreambuf_iterator<char>(seedInput), istreambuf_iterator<char>());
+    if(seedPath == "-")
+    {
+        if(!bNoConfirm)
+            throw invalid_argument("Argument Error: -y is needed while appointing - as seedPath.");
+        //Read cin.
+        while(!cin.eof())
+        {
+            string tmpBuf;
+            getline(cin, tmpBuf);
+            iBuffer += tmpBuf;
+            iBuffer.push_back('\n');
+        }
+        iBuffer.pop_back();
+//        cout << "Debug >>>" << iBuffer << "<<< Done." << endl;
+    }
+    else
+    {
+        ifstream iSeed(seedPath, ios::in);
+        if(!iSeed)
+        {
+            DEBUG_PRINT((string("File:") + seedPath).c_str());
+            throw runtime_error("Can't open seed file. Please check and try again. ");
+        }
 
-    dynamic_cast<ifstream *>(&seedInput)->close();
+        iSeed.seekg(0, ios::end);
+
+        iBuffer.reserve(static_cast<unsigned long>(iSeed.tellg()));
+        iSeed.seekg(0, ios::beg);
+        iBuffer.assign(istreambuf_iterator<char>(iSeed), istreambuf_iterator<char>());
+
+        iSeed.close();
+    }
+
 
     //Get result.
     pswdGener gen;
