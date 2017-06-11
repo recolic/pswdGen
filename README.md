@@ -1,2 +1,0 @@
-## pswdGen
-# No further information.
