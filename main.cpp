@@ -110,7 +110,6 @@ int main(int arg_size, char **arg)
             iBuffer.push_back('\n');
         }
         iBuffer.pop_back();
-//        cout << "Debug >>>" << iBuffer << "<<< Done." << endl;
     }
     else
     {
