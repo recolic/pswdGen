@@ -18,11 +18,13 @@ public:
         //Enhash seed for encrypt.
         string hashed_seed, hashed_domain;
         picosha2::hash256_hex_string(seed, hashed_seed);
-        picosha2::hash256_hex_string(domain, hashed_domain);
+        picosha2::hash256_hex_string(string("RecolicEncrypt") + domain, hashed_domain);
+        std::cout << "DEBUG> HashedDomain=" << hashed_domain << std::endl;
         //AES encrypt by hashed_seed.
-        string dataToEncrypt = string("RecolicEncrypt") + hashed_domain + "End";
+        string &dataToEncrypt = hashed_domain;
         while(dataToEncrypt.size() % 16 != 0)
             dataToEncrypt += 'n';
+        std::cout << "DEBUG> dataToEnc=" << dataToEncrypt << std::endl;
         std::shared_ptr<unsigned char> pEncrypedData(new unsigned char[dataToEncrypt.size()]{});
         plusaes::Error aes_error = plusaes::encrypt_ecb(reinterpret_cast<const unsigned char *>(dataToEncrypt.c_str()), dataToEncrypt.size(),
                                                         reinterpret_cast<const unsigned char *>(hashed_seed.c_str()), 32,
