@@ -94,7 +94,7 @@ int main(int arg_size, char **arg)
 void showHelpInfoAndExit()
 {
     cout << R"RGEN(
-********pswdGener*******
+********pswdGener v5****
 ---by Recolic Keghart---
 ---github.com/recolic---
 ---   GNU LICENSED   ---
@@ -114,11 +114,11 @@ Options:
 -s --seed [REQUIRED]:
     Give path to seed file. '-' to read stdin.
 -f --for [REQUIRED]:
-    Identifyer to where the pswd is used.
+    Identifier to where the pswd is used.
 
 Example:
 ./pswdGen -h
 ./pswdGen -s ~/se.txt -f recolic.net -o out.txt
-    )" << endl;
+    )RGEN" << endl;
     exit(0);
 }
