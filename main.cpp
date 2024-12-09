@@ -94,7 +94,7 @@ int main(int arg_size, char **arg)
 void showHelpInfoAndExit()
 {
     cout << R"RGEN(
-********pswdGener v5****
+********pswdGener v5.2**
 ---by Recolic Keghart---
 ---github.com/recolic---
 ---   GNU LICENSED   ---

@@ -44,7 +44,14 @@ public:
     {
         //Enhash seed for encrypt.
         string hashed_seed, hashed_domain;
-        picosha2::hash256_hex_string(seed, hashed_seed);
+        const string prehashed_seed_prefix = "hash:";
+        if (seed.rfind(prehashed_seed_prefix, 0) == 0) {
+            // if seed starts with hashed:, no need to hash again.
+            hashed_seed = seed.substr(prehashed_seed_prefix.size());
+        }
+        else {
+            picosha2::hash256_hex_string(seed, hashed_seed);
+        }
         picosha2::hash256_hex_string(string("RecolicEncrypt") + domain, hashed_domain);
         //AES encrypt by hashed_seed.
         string &dataToEncrypt = hashed_domain;
